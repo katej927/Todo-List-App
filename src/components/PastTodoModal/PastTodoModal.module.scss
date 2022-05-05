@@ -1,0 +1,133 @@
+@use '/src/styles/constants/colors';
+@use '/src/styles/constants/levels';
+@use '/src/styles/mixins/flexbox';
+@use '/src/styles/mixins/position';
+
+.backBoard {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 360px;
+  height: 720px;
+  left: 0;
+  top: 0;
+  border-radius: 60px;
+  background-color: rgba($color: #000000, $alpha: 0.6);
+  z-index: 99;
+
+  .main {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    border-radius: 40px;
+    background-color: colors.$WHITE;
+
+    .closeBtnWrapper {
+      position: relative;
+      width: inherit;
+      height: 60px;
+
+      .closeBtn {
+        position: absolute;
+        width: 24px;
+        height: 24px;
+        background-image: url('../../assets/pngs/x_btn.png');
+        color: colors.$TASKS_TITLE;
+        top: 30px;
+        right: 30px;
+      }
+    }
+
+    .modalTitle {
+      padding-left: 10%;
+      font-size: 20px;
+      font-weight: 500;
+      word-spacing: 2px;
+      line-height: 26px;
+      color: colors.$BIG_TITLE;
+    }
+
+    .taskList {
+      display: flex;
+      height: 120px;
+      flex-direction: column;
+      margin-top: 10px;
+      padding: 0 10%;
+      overflow-y: scroll;
+
+      .task {
+        display: flex;
+        align-items: center;
+        height: 40px;
+        line-height: 40px;
+
+        .taskTitle {
+          font-size: 16px;
+          overflow: hidden;
+          color: colors.$TASK_ITEM_TITLE;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .checkboxWrapper {
+          @include flexbox.flexbox(center center);
+          position: relative;
+          width: 28px;
+          height: 28px;
+          margin: 0 12px;
+    
+          svg {
+            @include position.middleBox;
+            z-index: levels.$CHECK_ICON;
+            color: colors.$WHITE;
+            pointer-events: none;
+            opacity: 0;
+            transition: 0.2s;
+          }
+        }
+
+        input[type='checkbox'] {
+          @include position.middleBox;
+          z-index: levels.$CHECK_BOX;
+          width: 24px;
+          height: 24px;
+          cursor: pointer;
+          border: 3px solid #7C7CFF;
+          border-radius: 50%;
+          transition: 0.2s;
+    
+          &:checked {
+            background-color: #7C7CFF;
+            border: 0;
+    
+            ~ svg {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+    .confirmBtnWrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: inherit;
+      height: 65px;
+
+    }
+    .confirmBtn {
+      border: 1px solid #0080F5;
+      font-size: 14px;
+      font-weight: 600;
+      color: #0080F5;
+      border-radius: 50px;
+      width: 100px;
+      height: 40px;
+    }
+  }
+}
+
+.modalOff {
+  display: none;
+}
