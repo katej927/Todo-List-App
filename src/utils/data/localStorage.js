@@ -33,3 +33,24 @@ export const getPastTodosByNickName = (nickName) => {
   const today = moment().format('YYYY/MM/DD')
   return userData.data.todoList.filter(todo => moment(todo.date).isBefore(today) && !todo.isDone)
 }
+
+export const updatePastTodos = (nickName, pastTodos, deleteTodos) => {
+  const userData = getUserByNickName(nickName)
+  pastTodos.forEach(val => {
+    const index = userData.data.todoList.findIndex(value => value.id === val.id)
+    userData.data.todoList.splice(index, 1)
+  })
+  deleteTodos.forEach(val => {
+    const index = pastTodos.findIndex(value => value.id === val.id)
+    pastTodos.splice(index, 1)
+  })
+  pastTodos.forEach((todo) => {todo.date = moment().format('YYYY/MM/DD')})
+  userData.data.todoList.push(...pastTodos)
+  const allData = getAllData()
+  allData.forEach(user => {
+    if(user.userNickName === nickName) {
+      user.data.todoList = userData.data.todoList
+    }
+  })
+  updateAllData(allData)
+}
