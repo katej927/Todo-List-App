@@ -1,15 +1,15 @@
-@use '/src/styles/constants/colors';
-@use '/src/styles/constants/levels';
-@use '/src/styles/mixins/flexbox';
-@use '/src/styles/mixins/position';
+@use "/src/styles/constants/colors";
+@use "/src/styles/constants/levels";
+@use "/src/styles/mixins/flexbox";
+@use "/src/styles/mixins/position";
 
 .todoList {
-  position: relative;
-  width: 360px;
-  height: 720px;
-  padding: 120px 40px 40px;
-  background-color: #fafbfe;
-  border-radius: 60px;
+  // position: relative;
+  // width: 360px;
+  // height: 720px;
+  // padding: 120px 40px 40px;
+  // background-color: #fafbfe;
+  // border-radius: 60px;
 
   h1 {
     font-size: 32px;
@@ -56,7 +56,7 @@
       }
     }
 
-    input[type='checkbox'] {
+    input[type="checkbox"] {
       @include position.middleBox;
       z-index: levels.$CHECK_BOX;
       width: 28px;
@@ -102,7 +102,7 @@
       @include position.middleBox;
       width: 20px;
       height: 2px;
-      content: '';
+      content: "";
       background-color: colors.$WHITE;
     }
 

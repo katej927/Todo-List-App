@@ -1,7 +1,8 @@
-@use '/src/styles/constants/colors';
+@use "/src/styles/constants/colors";
 
 .app {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   height: 100vh;
@@ -42,4 +43,13 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.container {
+  position: relative;
+  width: 360px;
+  height: 720px;
+  padding: 120px 40px 40px;
+  background-color: #fafbfe;
+  border-radius: 60px;
 }
