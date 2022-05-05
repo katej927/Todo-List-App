@@ -5,8 +5,9 @@ import 'dayjs/locale/bs'
 
 export default function BtnCalendar() {
   dayjs.extend(localeData)
+  const dateOfToday = dayjs().date()
   const weekdaysMin = dayjs().locale('en-us').localeData().weekdaysMin()
-  const firstDayOfMonth = dayjs('2022-06-01').startOf('month').day()
+  const firstDayOfMonth = dayjs().startOf('month').day()
   const daysInMonth = dayjs().daysInMonth()
   const blanksInMonth = Array(firstDayOfMonth).fill('')
   const spreadDaysInMonth = Array.from({ length: daysInMonth }, (v, i) => i + 1)
@@ -23,6 +24,8 @@ export default function BtnCalendar() {
     return acc
   }, [])
 
+  console.log(dayjs().date())
+
   return (
     <table className={styles.btnCalendar}>
       <thead>
@@ -35,10 +38,12 @@ export default function BtnCalendar() {
         </tr>
       </thead>
       <tbody>
-        {month.map((week) => (
-          <tr>
-            {week.map((date) => (
-              <td>{date}</td>
+        {month.map((week, idx) => (
+          <tr key={`week-${idx + 1}`}>
+            {week.map((date, index) => (
+              <td key={`date-${index + 1}`} className={`date ${dateOfToday === date && 'today'}`}>
+                {date}
+              </td>
             ))}
           </tr>
         ))}
