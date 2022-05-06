@@ -1,0 +1,133 @@
+@use '/src/styles/constants/colors';
+@use '/src/styles/constants/levels';
+@use '/src/styles/mixins/flexbox';
+@use '/src/styles/mixins/position';
+
+.backBoard {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 360px;
+  height: 720px;
+  background-color: rgba($color: #000000, $alpha: 60%);
+  border-radius: 60px;
+
+  .main {
+    position: relative;
+    width: 320px;
+    height: 320px;
+    background-color: colors.$WHITE;
+    border-radius: 40px;
+
+    .closeBtnWrapper {
+      position: relative;
+      width: inherit;
+      height: 60px;
+
+      .closeBtn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 46px;
+        height: 46px;
+        cursor: pointer;
+      }
+    }
+
+    .modalTitle {
+      padding-left: 10%;
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 26px;
+      color: colors.$BIG_TITLE;
+      word-spacing: 2px;
+    }
+
+    .taskList {
+      display: flex;
+      flex-direction: column;
+      height: 120px;
+      padding: 0 10%;
+      margin-top: 10px;
+      overflow-y: scroll;
+
+      .task {
+        display: flex;
+        align-items: center;
+        height: 40px;
+        line-height: 40px;
+
+        .taskTitle {
+          overflow: hidden;
+          font-size: 16px;
+          color: colors.$TASK_ITEM_TITLE;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .checkboxWrapper {
+          @include flexbox.flexbox(center center);
+          position: relative;
+          width: 28px;
+          height: 28px;
+          margin: 0 12px;
+
+          svg {
+            @include position.middleBox;
+            z-index: levels.$CHECK_ICON;
+            color: colors.$WHITE;
+            pointer-events: none;
+            opacity: 0;
+            transition: 0.2s;
+          }
+        }
+
+        input[type='checkbox'] {
+          @include position.middleBox;
+          z-index: levels.$CHECK_BOX;
+          width: 24px;
+          height: 24px;
+          cursor: pointer;
+          border: 3px solid #7373eb;
+          border-radius: 50%;
+          transition: 0.2s;
+
+          &:checked {
+            background-color: #7373eb;
+            border: 0;
+
+            ~ svg {
+              opacity: 1;
+            }
+          }
+        }
+      }
+    }
+
+    .confirmBtnWrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: inherit;
+      height: 65px;
+    }
+
+    .confirmBtn {
+      width: 100px;
+      height: 40px;
+      font-size: 14px;
+      font-weight: 600;
+      color: colors.$BLUE;
+      border: 1px solid colors.$BLUE;
+      border-radius: 50px;
+    }
+  }
+}
+
+.modalOff {
+  display: none;
+}
