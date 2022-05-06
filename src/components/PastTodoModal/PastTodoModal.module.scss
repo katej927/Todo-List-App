@@ -30,12 +30,12 @@
 
       .closeBtn {
         position: absolute;
-        top: 30px;
-        right: 30px;
-        width: 24px;
-        height: 24px;
+        top: 20px;
+        right: 20px;
+        width: 46px;
+        height: 46px;
         color: colors.$TASKS_TITLE;
-        background-image: url('../../assets/pngs/x_btn.png'); // will change
+        cursor: pointer;
       }
     }
 
