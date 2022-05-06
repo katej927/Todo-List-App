@@ -1,66 +1,27 @@
 import styles from './PastTodoModal.module.scss'
 import { useState } from 'react'
 import { CheckIcon } from '../../assets/svgs'
-
 import PropTypes from 'prop-types'
+import { getCategoryByNickNameAndCategoryId } from '../../utils/data/localStorage'
 
-/** Fake Data */
-const INIT_TODO = [
-  {
-    id: 1,
-    todo: "계란 2판 사기",
-    categoryId: 3,
-    date: '2022/02/01',
-    isDone: false,
-    color: '#A8A8A9'
-  },
-  {
-    id: 2,
-    todo: "맥북 프로 M1 Max CTO 버전 사기",
-    categoryId: 3,
-    date: '2022/02/01',
-    isDone: true,
-    color: 'black'
-  },
-  {
-    id: 3,
-    todo: "오늘의 TIL 작성하기",
-    categoryId: 3,
-    date: '2022/02/01',
-    isDone: true,
-    color: '#7C7CFF'
-  },
-  {
-    id: 4,
-    todo: "과제 마무리",
-    categoryId: 3,
-    date: '2022/02/01',
-    isDone: false,
-    color: '#B4B4B4'
-  },
-  {
-    id: 5,
-    todo: "오늘의 TIL 작성하기",
-    categoryId: 3,
-    date: '2022/02/01',
-    isDone: false,
-    color: 'blue'
-  },
-];
-
-
-function PastTodoModal({isShow, data = INIT_TODO, userId, close, updatePastTodo}) {
-  const [pastTodos, setPastTodos] = useState(data);
+function PastTodoModal({isShow, data, nickName, close, updateData}) {
+  const [pastTodos, setPastTodos] = useState(data)
   const todoChange = (e) => {
     const { dataset, checked } = e.currentTarget
     const { id } = dataset
 
     setPastTodos((prev) => {
-      const targetIndex = prev.findIndex((todo) => todo.id === Number(id))
+      const targetIndex = prev.findIndex((todo) => todo.id === id)
       const newList = [...prev]
       newList[targetIndex].isDone = checked
       return newList
     })
+  }
+
+  const onSubmit = () => {
+    const willDeleteData = pastTodos.filter(val => !val.isDone)
+    updateData(nickName, data, willDeleteData)
+    close()
   }
 
   return(
@@ -75,19 +36,19 @@ function PastTodoModal({isShow, data = INIT_TODO, userId, close, updatePastTodo}
             <li key={`past_todo_${value.id}`} className={styles.task}>
               <div className={styles.checkboxWrapper}>
                 <input 
-                  style={{borderColor: value.color, backgroundColor: value.isDone && value.color}}
+                  style={{borderColor: getCategoryByNickNameAndCategoryId(nickName, value.categoryId).color, backgroundColor: value.isDone && getCategoryByNickNameAndCategoryId(nickName, value.categoryId).color}}
                   type='checkbox' 
                   data-id={value.id} 
                   checked={value.isDone} 
                   onChange={todoChange}/>
                 <CheckIcon />
               </div>
-              <p className={styles.taskTitle} style={{color: value.color}}>{value.todo}</p>
+              <p className={styles.taskTitle} style={{color: getCategoryByNickNameAndCategoryId(nickName, value.categoryId).color}}>{value.todo}</p>
             </li>
           )}
         </ul>
         <div className={styles.confirmBtnWrapper}>
-          <button type='button' className={styles.confirmBtn} onClick={close}>Confirm</button> {/** TODO close => updatePastTodo */}
+          <button type='button' className={styles.confirmBtn} onClick={onSubmit}>Confirm</button>
         </div>
       </div>
     </div>
@@ -96,10 +57,16 @@ function PastTodoModal({isShow, data = INIT_TODO, userId, close, updatePastTodo}
 
 PastTodoModal.propTypes = {
   isShow: PropTypes.bool.isRequired,
-  data: PropTypes.string.isRequired, // TODO change type to object (pastTodoList)
-  userId: PropTypes.number.isRequired,
+  data: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    todo: PropTypes.string.isRequired,
+    categoryId: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    isDone: PropTypes.bool,
+  })).isRequired,
+  nickName: PropTypes.string.isRequired,
   close: PropTypes.func.isRequired,
-  updatePastTodo: PropTypes.func.isRequired
+  updateData: PropTypes.func.isRequired
 }
 
 export default PastTodoModal
