@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { CheckIcon } from '../../assets/svgs'
 import PropTypes from 'prop-types'
 
-function PastTodoModal({isShow, data, nickName, close, updateData, getCategoryByNickNameAndId}) {
+function PastTodoModal({isShow, data, nickName, close, submit, getCategoryByNickNameAndId}) {
   const [pastTodos, setPastTodos] = useState(data)
   const todoChange = (e) => {
     const { dataset, checked } = e.currentTarget
@@ -15,12 +15,6 @@ function PastTodoModal({isShow, data, nickName, close, updateData, getCategoryBy
       newList[targetIndex].isDone = checked
       return newList
     })
-  }
-
-  const onSubmit = () => {
-    const willDeleteData = pastTodos.filter(val => !val.isDone)
-    updateData(nickName, data, willDeleteData)
-    close()
   }
 
   return(
@@ -50,7 +44,10 @@ function PastTodoModal({isShow, data, nickName, close, updateData, getCategoryBy
           )}
         </ul>
         <div className={styles.confirmBtnWrapper}>
-          <button type='button' className={styles.confirmBtn} onClick={onSubmit}>Confirm</button>
+          <button 
+            type='button' 
+            className={styles.confirmBtn} 
+            onClick={() => submit(nickName, data, pastTodos)}>Confirm</button>
         </div>
       </div>
     </div>
@@ -68,7 +65,7 @@ PastTodoModal.propTypes = {
   })).isRequired,
   nickName: PropTypes.string.isRequired,
   close: PropTypes.func.isRequired,
-  updateData: PropTypes.func.isRequired,
+  submit: PropTypes.func.isRequired,
   getCategoryByNickNameAndId: PropTypes.func.isRequired
 }
 
