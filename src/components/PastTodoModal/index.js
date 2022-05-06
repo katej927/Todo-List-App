@@ -2,9 +2,8 @@ import styles from './PastTodoModal.module.scss'
 import { useState } from 'react'
 import { CheckIcon } from '../../assets/svgs'
 import PropTypes from 'prop-types'
-import { getCategoryByNickNameAndCategoryId } from '../../utils/data/localStorage'
 
-function PastTodoModal({isShow, data, nickName, close, updateData}) {
+function PastTodoModal({isShow, data, nickName, close, updateData, getCategoryByNickNameAndId}) {
   const [pastTodos, setPastTodos] = useState(data)
   const todoChange = (e) => {
     const { dataset, checked } = e.currentTarget
@@ -36,14 +35,17 @@ function PastTodoModal({isShow, data, nickName, close, updateData}) {
             <li key={`past_todo_${value.id}`} className={styles.task}>
               <div className={styles.checkboxWrapper}>
                 <input 
-                  style={{borderColor: getCategoryByNickNameAndCategoryId(nickName, value.categoryId).color, backgroundColor: value.isDone && getCategoryByNickNameAndCategoryId(nickName, value.categoryId).color}}
+                  style={
+                    { borderColor: getCategoryByNickNameAndId(nickName, value.categoryId).color, 
+                      backgroundColor: value.isDone && getCategoryByNickNameAndId(nickName, value.categoryId).color
+                    }}
                   type='checkbox' 
                   data-id={value.id} 
                   checked={value.isDone} 
                   onChange={todoChange}/>
                 <CheckIcon />
               </div>
-              <p className={styles.taskTitle} style={{color: getCategoryByNickNameAndCategoryId(nickName, value.categoryId).color}}>{value.todo}</p>
+              <p className={styles.taskTitle} style={{color: getCategoryByNickNameAndId(nickName, value.categoryId).color}}>{value.todo}</p>
             </li>
           )}
         </ul>
@@ -66,7 +68,8 @@ PastTodoModal.propTypes = {
   })).isRequired,
   nickName: PropTypes.string.isRequired,
   close: PropTypes.func.isRequired,
-  updateData: PropTypes.func.isRequired
+  updateData: PropTypes.func.isRequired,
+  getCategoryByNickNameAndId: PropTypes.func.isRequired
 }
 
 export default PastTodoModal
