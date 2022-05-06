@@ -22,7 +22,7 @@ function PastTodoModal({isShow, data, nickName, close, submit, getCategoryByNick
     <div className={isShow ? styles.backBoard : styles.modalOff}>
       <div className={styles.main}>
         <div className={styles.closeBtnWrapper}>
-          <IoIosClose className={styles.closeBtn} onClick={close} />
+          <IoIosClose color='#A8A8A8' className={styles.closeBtn} onClick={close} />
         </div>
         <h1 className={styles.modalTitle}>Today&apos;s Tasks에 <br/>추가하시겠습니까?</h1>
         <ul className={styles.taskList}>
