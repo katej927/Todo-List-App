@@ -1,2 +1,5 @@
 export { ReactComponent as LogoImage } from './logo.svg'
 export { ReactComponent as CheckIcon } from './check.svg'
+export { ReactComponent as ModalCheckIcon } from './ModalCheck.svg'
+export { ReactComponent as ModalCalendarIcon } from './ModalCalendar.svg'
+export { ReactComponent as ModalTrashIcon } from './ModalTrash.svg'
