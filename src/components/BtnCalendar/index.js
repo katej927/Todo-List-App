@@ -1,15 +1,28 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './UpdateTodo.module.scss'
+import cn from 'classnames/bind'
 import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io'
 import * as dayjs from 'dayjs'
 import * as localeData from 'dayjs/plugin/localeData'
 import 'dayjs/locale/bs'
+import PropTypes from 'prop-types'
 
 dayjs.extend(localeData)
+const cx = cn.bind(styles)
 
-export default function BtnCalendar() {
+// export default function BtnCalendar({}) {
+function BtnCalendar({ getDate }) {
   // 선택된 날
   const [selectedDay, setSelectedDay] = useState(dayjs())
+  const [selectedBtn, setSelectedBtn] = useState({ date: '', isOpen: false, showDate: false })
+
+  // 수정할 투두의 date update
+  // useEffect(() => {
+  //   if (dateProps) {
+  //     setSelectedDay(dateProps) // 재가공 해야 할 수 있음
+  //     setSelectedBtn(dateProps)
+  //   }
+  // }, [dateProps])
 
   // 단축 월 리스트
   const MONTHS = dayjs.monthsShort()
@@ -57,9 +70,15 @@ export default function BtnCalendar() {
   // 보여줄 데이터들
   const [shownData, setShowData] = useState({ position: 2, data: CALENDAR_TYPE[2] })
   const { position } = shownData
-  const { isDisabled, column, needThead, arrowStandard, navi, tbodyData } = shownData.data
+  const { id, isDisabled, column, needThead, arrowStandard, navi, tbodyData } = shownData.data
 
   useEffect(() => {
+    setSelectedBtn((prev) => ({
+      ...prev,
+      date: selectedDay.format('YYYY/MM/DD'),
+      // isOpen: !prev.isOpen,
+      showDate: prev.showDate,
+    }))
     setShowData({
       ...shownData,
       data: {
@@ -89,45 +108,106 @@ export default function BtnCalendar() {
   const handleArrowClick = (direction) => {
     const { step, unit } = arrowStandard
     setSelectedDay(direction === 'up' ? selectedDay.add(step, unit) : selectedDay.subtract(step, unit))
+    // setSelectedBtn((prev) => ({ ...prev, isOpen: false }))
+    setSelectedBtn((prev) => ({ ...prev, isOpen: true }))
   }
 
-  console.log('selectedDay', selectedDay, 'shownData', shownData)
+  const handleTdBtnClick = (el) => {
+    if (id === 'main') {
+      setSelectedDay(selectedDay.date(el))
+      setSelectedBtn((prev) => ({ ...prev, isOpen: !prev.isOpen }))
+    }
+    if (id === 'months') {
+      setSelectedDay(selectedDay.month(MONTHS.indexOf(el)))
+      setShowData({ position: 2, data: CALENDAR_TYPE[2] })
+    }
+    if (id === 'years') {
+      setSelectedDay(selectedDay.year(el))
+      setShowData({ position: 2, data: CALENDAR_TYPE[2] })
+    }
+  }
+
+  const handleSelectedBtnClick = () => {
+    setSelectedBtn({ date: selectedDay.format('YYYY/MM/DD'), isOpen: !selectedBtn.isOpen, showDate: true })
+  }
+
+  console.log(
+    'selectedDay',
+    selectedDay,
+    selectedDay.format('YYYY/MM/DD'),
+    'shownData',
+    shownData,
+    'selectedBtn',
+    selectedBtn,
+    'test',
+    MONTHS[selectedDay.month()]
+  )
 
   return (
-    <section>
-      <div>
-        {navi.map((el, idx) => (
-          <button key={el} type='button' onClick={() => handleNaviBtnClick(idx)} disabled={isDisabled}>
-            {el}
-          </button>
-        ))}
-        <IoIosArrowUp onClick={() => handleArrowClick('up')} />
-        <IoIosArrowDown onClick={() => handleArrowClick('down')} />
-      </div>
-      <table className={styles.btnCalendar}>
-        {needThead && (
-          <thead>
-            <tr>
+    <section className={cx('btnCalendarWrap')}>
+      <button className={cx('datePickBtn')} type='button' onClick={handleSelectedBtnClick}>
+        {selectedBtn.showDate ? selectedBtn.date : '날짜 선택'}
+      </button>
+      <section className={cx('calendarWrap', { hide: !selectedBtn.isOpen })}>
+        <div className={cx('naviWrap')}>
+          <div className={cx('btnWrap')}>
+            {navi.map((el, idx) => (
+              <button
+                className={cx('navi', [`${CALENDAR_TYPE[idx].id}`], { loadedMain: shownData.data.id === 'main' })}
+                key={el}
+                type='button'
+                onClick={() => handleNaviBtnClick(idx)}
+                disabled={isDisabled}
+              >
+                {el}
+              </button>
+            ))}
+          </div>
+          <div className={cx('iconsWrap')}>
+            <IoIosArrowUp className={cx('icon')} onClick={() => handleArrowClick('up')} />
+            <IoIosArrowDown className={cx('icon')} onClick={() => handleArrowClick('down')} />
+          </div>
+        </div>
+        <table className={cx('calendarTable')}>
+          <thead className={cx('calendarThead', { show: needThead })}>
+            <tr className={cx('calendarTr1')}>
               {WEEKDAY.map((day) => (
-                <th key={day} className={styles.weekDay}>
+                <th key={day} className={cx('calendarTh')}>
                   {day}
                 </th>
               ))}
             </tr>
           </thead>
-        )}
-        <tbody>
-          {manufacturedTbodyData.map((eachRow, idx) => (
-            <tr key={`week-${idx + 1}`}>
-              {eachRow.map((el, index) => (
-                <td key={`date-${index + 1}`} className={`date ${selectedDay.date() === el && 'selected'}`}>
-                  {el}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          <tbody className={cx('calendarTbody')}>
+            {manufacturedTbodyData.map((eachRow, idx) => (
+              <tr key={`tr-${idx + 1}`} className={cx('calendarTr2')}>
+                {eachRow.map((el, index) => (
+                  <td key={`td-${index + 1}`} className={cx('eachTd')}>
+                    {el !== '' && (
+                      <button
+                        type='button'
+                        className={cx('eachTdbtn', {
+                          selected: (selectedDay.date() || MONTHS[selectedDay.month()] || selectedDay.year()) === el,
+                          main: id === 'main',
+                        })}
+                        onClick={() => handleTdBtnClick(el)}
+                      >
+                        {el}
+                      </button>
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </section>
     </section>
   )
 }
+
+BtnCalendar.propTypes = {
+  getDate: PropTypes.func,
+}
+
+export default BtnCalendar

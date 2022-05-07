@@ -1,3 +1,100 @@
-.date.today {
-  background-color: red;
+@use '/src/styles/constants/colors';
+@use '/src/styles/constants/levels';
+@use '/src/styles/mixins/flexbox';
+@use '/src/styles/mixins/position';
+
+.btnCalendarWrap {
+  .datePickBtn {
+    position: relative;
+    width: 280px;
+    height: 50px;
+    padding-left: 50px;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: colors.$GRAY6;
+    text-align: left;
+    border: 3px solid colors.$GRAYE;
+    border-radius: 35px;
+  }
+
+  .calendarWrap {
+    $tableWidth: 245px;
+    $tableHeight: 175px;
+    width: fit-content;
+    height: 280px;
+    border: 1px solid green;
+
+    &.hide {
+      display: none;
+    }
+
+    .naviWrap {
+      @include flexbox.flexbox(between,center);
+      margin-bottom: 10px;
+
+      .navi {
+        margin-right: 7px;
+        font-size: 16px;
+        color: colors.$GRAY3;
+
+        &.loadedMain {
+          &:hover {
+            background-color: colors.$GRAYE;
+            border-radius: 3px;
+          }
+        }
+      }
+
+      .icon {
+        cursor: pointer;
+      }
+    }
+
+    .calendarTable {
+      width: $tableWidth;
+      height: $tableHeight;
+      border: 1px solid red;
+
+      .calendarThead {
+        display: none;
+        color: colors.$GRAYA;
+
+        &.show {
+          display: table-header-group;
+        }
+      }
+
+      .calendarTh {
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+
+      .eachTd {
+        // display: flex;
+        // justify-content: center;
+
+        .eachTdbtn {
+          @include flexbox.flexbox;
+          width: 58px;
+          height: 58px;
+          color: colors.$GRAY6;
+          border-radius: 50%;
+
+          &.main {
+            width: 35px;
+            height: 35px;
+          }
+
+          &:hover {
+            background-color: colors.$GRAYE;
+          }
+
+          &.selected {
+            background-color: colors.$GRAYE;
+            border: 1px solid colors.$PURPLE;
+          }
+        }
+      }
+    }
+  }
 }
