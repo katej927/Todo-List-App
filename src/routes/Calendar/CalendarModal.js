@@ -1,41 +1,25 @@
+import { useMemo } from 'react'
+import { Link } from 'react-router-dom'
+import { deleteTodo } from '../../utils/data/localStorage'
 import PropTypes from 'prop-types'
-import cx from 'classnames'
 import styles from './CalendarModal.module.scss'
 import { ModalCalendarIcon, ModalCheckIcon, ModalTrashIcon } from '../../assets/svgs'
-import { useEffect, useMemo } from 'react'
 
-// props:{
-//   modalState: boolean
-//   setModalState: func
-//   todo: {
-//     categoryId: "test3"
-//     date: "2022/06/01"
-//     id: "5"
-//     isDone: false
-//     todo: "test3"
-//   }
-//   category: {
-//     categoryName: "카테고리"
-//     color: "#CCCCCC"
-//     id: "test3"
-//   }
-// }
-
-// 동적으로 css 값을 다루는 방법이 있을까요??(색상 변경하는 방법 여쭤보기)
-// 1. inline - stying은 성능에 좋지 않다.
-// 2. 아래의 방법을 써도 괜찮은가??
-// https://www.section.io/engineering-education/dynamically-update-react-and-javascript-with-css-variables/
-
-const CalendarModal = function CalendarModal({ modalState, setModalState, todo, category }) {
+// modalState 대신에 userNickName 받아올 것
+const CalendarModal = function CalendarModal({ nickName, setModalState, todo, category }) {
   const handleCloseModal = () => {
+    setModalState(false)
+  }
+
+  const handleDeleteTodo = () => {
+    deleteTodo(nickName, todo)
     setModalState(false)
   }
 
   // changeDateFormat '/' to '-'
   const changeDateFormat = (date) => {
-    const dateArr = date.split('/').join('-')
-
-    return dateArr
+    const changedFormatDate = date.split('/').join('-')
+    return changedFormatDate
   }
   const changedDate = useMemo(() => changeDateFormat(todo.date), [todo])
 
@@ -44,13 +28,6 @@ const CalendarModal = function CalendarModal({ modalState, setModalState, todo, 
       <div className={styles.modalBackground} />
       <section className={styles.modalMain}>
         {/* Children Part */}
-        {/* 버튼은 그려야할 지 말아야할 지 여쭤보기 */}
-        {/* <button
-          type='button'
-          className={styles.closeModalButton}
-          aria-label='close Button'
-          onClick={handleCloseModal}
-        /> */}
         <p className={styles.modalCategory} style={{ backgroundColor: category.color }}>
           {category.categoryName}
         </p>
@@ -66,10 +43,12 @@ const CalendarModal = function CalendarModal({ modalState, setModalState, todo, 
           <button type='button' onClick={handleCloseModal}>
             <ModalCheckIcon />
           </button>
-          <button type='button' onClick={handleCloseModal}>
-            <ModalCalendarIcon />
+          <button type='button'>
+            <Link to='/updateTodo'>
+              <ModalCalendarIcon />
+            </Link>
           </button>
-          <button type='button' onClick={handleCloseModal}>
+          <button type='button' onClick={handleDeleteTodo}>
             <ModalTrashIcon />
           </button>
         </div>
@@ -79,7 +58,7 @@ const CalendarModal = function CalendarModal({ modalState, setModalState, todo, 
 }
 
 CalendarModal.propTypes = {
-  modalState: PropTypes.bool.isRequired,
+  nickName: PropTypes.string.isRequired,
   setModalState: PropTypes.func.isRequired,
   todo: PropTypes.shape({
     categoryId: PropTypes.string.isRequired,
@@ -92,3 +71,20 @@ CalendarModal.propTypes = {
 }
 
 export default CalendarModal
+
+// {
+//   /* 버튼은 그려야할 지 말아야할 지 여쭤보기 */
+// }
+// {
+//   /* <button
+//           type='button'
+//           className={styles.closeModalButton}
+//           aria-label='close Button'
+//           onClick={handleCloseModal}
+//         /> */
+// }
+
+// 동적으로 css 값을 다루는 방법이 있을까요??(색상 변경하는 방법 여쭤보기)
+// 1. inline - stying은 성능에 좋지 않다.
+// 2. 아래의 방법을 써도 괜찮은가??
+// https://www.section.io/engineering-education/dynamically-update-react-and-javascript-with-css-variables/
