@@ -9,7 +9,7 @@ function UpdateTodo() {
   return (
     <div className={styles.UpdateTodo}>
       <span>UpdateTodo</span>
-      {/* test. merge시, 삭제 */}
+      {/* test. merge시, props 수정 */}
       <BtnCalendar getDate={getDate} forUpdateDate='' />
     </div>
   )
