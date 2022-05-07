@@ -46,33 +46,3 @@ export const calendarType = (selectedDay) => {
     },
   ]
 }
-
-// // tbody에 들어갈 data 배열 정리
-// let rowIdx = -1
-// export const manufacturedTbodyData = (tbodyData, column) =>
-//   tbodyData?.reduce((acc, cur, i, arr) => {
-//     console.log('티바디 tbodyData', tbodyData, 'acc', acc, 'rowIdx', rowIdx, 'cur', cur)
-//     if (!(i % column)) {
-//       acc.push([cur])
-//       rowIdx += 1
-//       if (cur === tbodyData[tbodyData.length - 1]) arr.splice(1)
-//     } else {
-//       console.log('else acc', acc, 'rowIdx', rowIdx, 'cur', cur)
-//       if (!acc.length && rowIdx > 0) arr.splice(1)
-
-//       acc[rowIdx].push(cur)
-//     }
-//     return acc
-//   }, [])
-
-let rowIdx = -1
-export const manufacturedTbodyData2 = (tbodyData2, column2) =>
-  tbodyData2.reduce((acc, cur, i) => {
-    if (!(i % column2)) {
-      acc.push([cur])
-      rowIdx += 1
-    } else {
-      acc[rowIdx].push(cur)
-    }
-    return acc
-  }, [])
