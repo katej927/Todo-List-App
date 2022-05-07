@@ -1,0 +1,92 @@
+@use '/src/styles/constants/colors';
+@use '/src/styles/mixins/position';
+
+.modalBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: colors.$BLACK;
+  opacity: 0.6;
+}
+
+.displayNone {
+  display: none;
+}
+
+.modalMain {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 313px;
+  height: 330px;
+  overflow: hidden;
+  background-color: colors.$WHITE;
+  border-radius: 35px;
+  @include position.middleBox;
+
+  & .modalCategory {
+    width: 100%;
+    height: 40px;
+    padding-left: 25px;
+    margin-top: 10px;
+    line-height: 40px;
+    // background-color: colors.$RED;
+  }
+
+  & label {
+    margin: 11px auto 5px 12px;
+    font-size: 11px;
+    color: colors.$GRAYA;
+  }
+
+  & label:first-child {
+    margin: 17px auto 5px 12px;
+  }
+
+  & .modalContent {
+    box-sizing: border-box;
+    width: calc(100% - 24px);
+    height: 39px;
+    padding-left: 13px;
+    margin: 0 12px;
+    line-height: 39px;
+    background-color: colors.$GRAYE;
+    border-radius: 10px;
+  }
+}
+
+.buttonList {
+  display: flex;
+  align-self: center;
+  justify-content: space-between;
+  width: 80%;
+  margin-top: 33px;
+}
+
+.closeModalButton {
+  @include position.absolute(20px 20px auto auto);
+  width: 18px;
+  height: 18px;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &::before,
+  &::after {
+    @include position.middleBox;
+    width: 20px;
+    height: 1px;
+    content: '';
+    background-color: colors.$GRAYA;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  &::after {
+    transform: translate(-50%, -50%) rotate(135deg);
+    transform-origin: center;
+  }
+}
